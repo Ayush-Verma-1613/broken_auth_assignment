@@ -1,0 +1,67 @@
+======================
+TASK 1: LOGIN
+======================
+
+Command:
+curl -X POST http://localhost:3000/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email":"ayush123@gmail.com","password":"password123"}'
+
+Response:
+{
+  "message": "OTP sent",
+  "loginSessionId": "cmvii3"
+}
+
+Server Log:
+[OTP] Session cmvii3 generated: 833734
+
+
+======================
+TASK 2: VERIFY OTP
+======================
+
+Command:
+curl -c cookies.txt -X POST http://localhost:3000/auth/verify-otp \
+-H "Content-Type: application/json" \
+-d '{"loginSessionId":"cmvii3","otp":"833734"}'
+
+Response:
+{
+  "message": "OTP verified",
+  "sessionId": "cmvii3"
+}
+
+
+======================
+TASK 3: GET TOKEN
+======================
+
+Command:
+curl -b cookies.txt -X POST http://localhost:3000/auth/token
+
+Response:
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expires_in": 900
+}
+
+
+======================
+TASK 4: PROTECTED ROUTE
+======================
+
+Command:
+curl -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:3000/protected
+
+Response:
+{
+  "message": "Access granted",
+  "user": {
+    "email": "ayush123@gmail.com",
+    "sessionId": "cmvii3",
+    "iat": 1770865064,
+    "exp": 1770865964
+  },
+  "success_flag": "FLAG-YXl1c2gxMjNAZ21haWwuY29tX0NPTVBMRVRFRF9BU1NJR05NRU5U"
+}
